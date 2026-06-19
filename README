@@ -1,130 +1,101 @@
 # 🚀 QuizForge
 
-QuizForge is a cloud-powered quiz management platform built using AWS Serverless Architecture. The platform enables Teachers to create and manage quizzes while allowing Students to attempt quizzes, access study materials, and track their performance through analytics and leaderboards.
+<p align="center">
+  <b>A Cloud-Powered Quiz Management Platform Built on AWS Serverless Architecture</b>
+</p>
 
-## 🌟 Features
+<p align="center">
 
-### Authentication & Security
+![AWS](https://img.shields.io/badge/AWS-Cloud-orange)
+![Serverless](https://img.shields.io/badge/Serverless-Framework-red)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)
+![Node.js](https://img.shields.io/badge/Node.js-Backend-green)
+![DynamoDB](https://img.shields.io/badge/DynamoDB-NoSQL-blue)
+![Cognito](https://img.shields.io/badge/Cognito-Authentication-purple)
 
-* User Registration and Login
+</p>
+
+---
+
+## 🌟 Overview
+
+QuizForge is a fully serverless cloud-based quiz management platform that enables teachers to create quizzes, distribute study materials, monitor student performance, and analyze results while allowing students to attempt quizzes and track their learning progress.
+
+Built using AWS services including Cognito, Lambda, DynamoDB, API Gateway, CloudFront, and S3.
+
+---
+
+## ✨ Key Features
+
+### 🔐 Authentication & Security
+
 * Email OTP Verification
 * AWS Cognito Authentication
-* Role-Based Access Control (Teacher / Student)
-* Secure Password Management
-* Forgot Password & Reset Password Functionality
+* Role-Based Access Control
+* Secure Password Reset
+* Session Management
 
-### Teacher Features
+### 👨‍🏫 Teacher Portal
 
 * Create Quizzes
-* Update Existing Quizzes
+* Update Quizzes
 * Delete Quizzes
-* View Quiz Results
-* Access Student Performance Analytics
 * Upload Study Materials
-* Monitor Quiz Participation
+* Monitor Student Performance
+* View Analytics Dashboard
 
-### Student Features
+### 👨‍🎓 Student Portal
 
-* Register and Login
 * Attempt Quizzes
-* View Quiz Results
 * Access Study Materials
-* Track Performance History
-* View Leaderboard Rankings
+* View Results
+* Track Quiz History
+* Leaderboard Ranking
 
-### Analytics & Reporting
+### 📊 Analytics
 
-* Teacher Analytics Dashboard
-* Quiz Performance Reports
-* Student Result Tracking
-* Leaderboard System
+* Quiz Statistics
+* Student Performance Tracking
+* Result Analysis
+* Leaderboard Generation
 
 ---
 
 ## 🏗️ System Architecture
 
-Frontend (HTML, CSS, JavaScript)
-
-↓
-
-Amazon CloudFront
-
-↓
-
-Amazon API Gateway
-
-↓
-
-AWS Lambda Functions
-
-↓
-
-Amazon DynamoDB & Amazon Cognito
+```text
+Frontend (HTML/CSS/JS)
+          │
+          ▼
+    CloudFront CDN
+          │
+          ▼
+     API Gateway
+          │
+          ▼
+     AWS Lambda
+      │       │
+      ▼       ▼
+ DynamoDB   Cognito
+```
 
 ---
 
 ## ☁️ AWS Services Used
 
-### Amazon Cognito
-
-Used for:
-
-* User Authentication
-* User Registration
-* Email Verification
-* Role Management
-
-### AWS Lambda
-
-Used for:
-
-* Serverless Backend Logic
-* Authentication APIs
-* Quiz Management APIs
-* Analytics APIs
-
-### Amazon API Gateway
-
-Used for:
-
-* REST API Management
-* Request Routing
-* API Exposure
-
-### Amazon DynamoDB
-
-Used for:
-
-* User Data Storage
-* Quiz Data Storage
-* Result Storage
-* Analytics Storage
-
-### Amazon CloudFront
-
-Used for:
-
-* Frontend Hosting
-* Global Content Delivery
-* Performance Optimization
-
-### Amazon S3
-
-Used for:
-
-* Static Website Hosting
-* Study Material Storage
-
-### AWS IAM
-
-Used for:
-
-* Permission Management
-* Service Access Control
+| Service        | Purpose                           |
+| -------------- | --------------------------------- |
+| Amazon Cognito | Authentication & OTP Verification |
+| AWS Lambda     | Serverless Backend                |
+| API Gateway    | REST APIs                         |
+| DynamoDB       | Database Storage                  |
+| CloudFront     | Global Content Delivery           |
+| S3             | Static Website Hosting            |
+| IAM            | Security & Permissions            |
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠 Tech Stack
 
 ### Frontend
 
@@ -146,29 +117,19 @@ Used for:
 
 * Amazon Cognito
 
-### Deployment
-
-* Amazon CloudFront
-* Amazon S3
-* API Gateway
-
 ---
 
 ## 📂 Project Structure
 
 ```text
-QUIZ WEBSITE
+QuizForge
 │
 ├── quiz-app-front-end
 │   ├── auth.html
-│   ├── auth.css
-│   ├── auth.js
 │   ├── teacher.html
-│   ├── teacher.css
 │   ├── student.html
-│   ├── student.css
 │   ├── quiz.html
-│   └── quiz.css
+│   └── assets
 │
 ├── quiz-app-backend-aws
 │   ├── functions
@@ -183,64 +144,47 @@ QUIZ WEBSITE
 │   ├── services
 │   ├── utils
 │   └── serverless.yml
-│
-└── README.md
 ```
+
+---
 
 ## 🔌 API Endpoints
 
 ### Authentication
 
-* POST /auth/register
-* POST /auth/login
-* POST /auth/confirm
-* POST /auth/forgot
-* POST /auth/reset
+```http
+POST /auth/register
+POST /auth/login
+POST /auth/confirm
+POST /auth/forgot
+POST /auth/reset
+```
 
 ### Quiz Management
 
-* POST /quiz/create
-* GET /quiz/{id}
-* GET /quiz/list
-* PUT /quiz/{id}
-* DELETE /quiz/{id}
-* POST /quiz/{id}/submit
-* GET /quiz/{id}/results
-
-### Analytics
-
-* GET /analytics/teacher
-* GET /student/results
-
-### Study Material
-
-* POST /study/upload
-* GET /study/list
-
-### Uploads
-
-* POST /upload/file
-
-### Leaderboard
-
-* GET /leaderboard
+```http
+POST   /quiz/create
+GET    /quiz/{id}
+PUT    /quiz/{id}
+DELETE /quiz/{id}
+POST   /quiz/{id}/submit
+```
 
 ---
 
 ## 🚀 Deployment
 
-Frontend:
+### Frontend
 
-* Amazon CloudFront
 * Amazon S3
+* Amazon CloudFront
 
-Backend:
+### Backend
 
 * AWS Lambda
 * API Gateway
-* Serverless Framework
 
-Deployment Command:
+Deploy Backend:
 
 ```bash
 sls deploy
@@ -248,29 +192,51 @@ sls deploy
 
 ---
 
-## 📚 Learning Outcomes
+## 📸 Screenshots
 
-Through this project, I gained practical experience in:
+### Login Page
 
-* AWS Cloud Services
-* Serverless Architecture
-* Authentication using Cognito
-* REST API Development
-* Database Design with DynamoDB
-* Cloud Deployment
-* Role-Based Access Control
-* Full Stack Web Development
+(Add Screenshot Here)
+
+### Teacher Dashboard
+
+(Add Screenshot Here)
+
+### Student Dashboard
+
+(Add Screenshot Here)
+
+### Analytics Dashboard
+
+(Add Screenshot Here)
 
 ---
 
-## 🎯 Future Enhancements
+## 📚 Learning Outcomes
+
+✅ AWS Cloud Computing
+
+✅ Serverless Architecture
+
+✅ Authentication with Cognito
+
+✅ REST API Development
+
+✅ DynamoDB Design
+
+✅ Full Stack Development
+
+✅ Cloud Deployment
+
+---
+
+## 🔮 Future Enhancements
 
 * AI-Based Quiz Generation
-* JWT Authorizers
+* Mobile Application
 * Real-Time Notifications
-* Advanced Analytics Dashboard
+* Advanced Analytics
 * Quiz Sharing Links
-* Mobile Application Support
 * Multi-Teacher Collaboration
 
 ---
@@ -279,7 +245,7 @@ Through this project, I gained practical experience in:
 
 **Vishwas Kumar**
 
-B.Tech Computer Science Engineering (IoT)
+B.Tech CSE (IoT)
 Vellore Institute of Technology (VIT), Vellore
 
-Project: QuizForge – Serverless Quiz Management Platform
+⭐ If you like this project, don't forget to star the repository!
