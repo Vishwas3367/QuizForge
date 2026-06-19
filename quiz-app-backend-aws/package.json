@@ -1,0 +1,26 @@
+{
+  "name": "quiz-backend-aws",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "handler.js",
+  "license": "MIT",
+  "scripts": {
+    "deploy": "serverless deploy",
+    "remove": "serverless remove"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.1057.0",
+    "@aws-sdk/client-dynamodb": "^3.1053.0",
+    "@aws-sdk/client-s3": "^3.1055.0",
+    "@aws-sdk/client-ses": "^3.1058.0",
+    "@aws-sdk/client-sns": "^3.1055.0",
+    "@aws-sdk/util-dynamodb": "^3.996.2",
+    "aws-jwt-verify": "^5.1.1",
+    "aws-sdk": "^2.1692.0",
+    "bcryptjs": "^3.0.3",
+    "jsonwebtoken": "^9.0.3"
+  },
+  "devDependencies": {
+    "serverless-offline": "^14.4.0"
+  }
+}

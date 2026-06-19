@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard</title>
+
+  <link rel="stylesheet" href="student.css">
+</head>
+<body>
+
+<header class="dashboard-header">
+  <h1>Student Dashboard</h1>
+
+  <div>
+    <span id="studentName">
+      Student
+    </span>
+
+    <button id="editProfileBtn">
+      Edit Profile
+    </button>
+
+    <button id="logoutBtn">
+      Logout
+    </button>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="student-tabs">
+
+  <button
+    class="tab-btn active"
+    onclick="showSection('dashboardSection',this)"
+  >
+    Dashboard
+  </button>
+
+  <button
+    class="tab-btn"
+    onclick="showSection('quizSection',this)"
+  >
+    My Quizzes
+  </button>
+
+  <button
+    class="tab-btn"
+    onclick="showSection('studySection',this)"
+  >
+    Study Materials
+  </button>
+
+  <button
+    class="tab-btn"
+    onclick="showSection('historySection',this)"
+  >
+    History
+  </button>
+
+  <!-- <button
+    class="tab-btn"
+    onclick="showSection('leaderboardSection',this)"
+  >
+    Leaderboard
+  </button> -->
+
+</div>
+
+  <div class="content-area">
+
+    <!-- Dashboard -->
+
+    <section id="dashboardSection">
+
+      <div class="profile-card">
+
+        <div class="avatar">
+          👤
+        </div>
+
+        <div>
+
+          <h2 id="studentProfileName">
+            Student
+          </h2>
+
+          <p id="studentProfileEmail">
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+
+          <h3 id="assignedCount">
+            0
+          </h3>
+
+          <p>Assigned</p>
+
+        </div>
+
+        <div class="stat-card">
+
+          <h3 id="completedCount">
+            0
+          </h3>
+
+          <p>Completed</p>
+
+        </div>
+
+        <div class="stat-card">
+
+          <h3 id="averageScore">
+            0%
+          </h3>
+
+          <p>Average</p>
+
+        </div>
+
+        <div class="stat-card">
+  <h2 id="pendingCount">0</h2>
+  <p>Pending</p>
+</div>
+
+      </div>
+
+    </section>
+
+    <!-- My Quizzes -->
+
+    <section
+      id="quizSection"
+      style="display:none;"
+    >
+
+      <h2>
+        My Quizzes
+      </h2>
+
+      <div id="quiz-list">
+        Loading quizzes...
+      </div>
+
+    </section>
+
+    <!-- Study Materials -->
+
+<section
+  id="studySection"
+  style="display:none;"
+>
+
+  <div class="section-card">
+
+    <h2>
+      📚 Study Materials
+    </h2>
+
+    <div id="studyMaterials">
+      Loading materials...
+    </div>
+
+  </div>
+
+</section>
+<section
+  id="historySection"
+  style="display:none;"
+>
+
+  <div class="section-card">
+
+    <h2>Quiz History</h2>
+
+    <div id="quizHistory">
+  <p>No completed quizzes yet.</p>
+</div>
+
+<div
+  id="leaderboard"
+  style="
+    margin-top:20px;
+    display:none;
+  "
+></div>
+
+  </div>
+
+</section>
+
+    <!-- Leaderboard -->
+
+<!-- <section
+  id="leaderboardSection"
+  style="display:none;"
+>
+
+  <div class="section-card">
+
+    <h2>🏆 Leaderboard</h2>
+
+    <div id="leaderboard">
+      Loading leaderboard...
+    </div>
+
+  </div>
+
+</section> -->
+
+  </div>
+
+</main>
+
+<div class="modal" id="profileModal">
+
+  <div class="modal-content">
+
+    <span
+      id="closeModal"
+      style="float:right;cursor:pointer"
+    >
+      ×
+    </span>
+
+    <h3>Edit Profile</h3>
+
+    <input
+      id="name"
+      placeholder="Name"
+    >
+
+    <button id="saveProfileBtn">
+      Save
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+const apiBase =
+  "https://ti3d0a29rd.execute-api.ap-south-1.amazonaws.com/dev";
+
+const token =
+  localStorage.getItem(
+    "quiz_access_token"
+  );
+
+const role =
+  localStorage.getItem(
+    "quiz_user_role"
+  );
+
+if (
+  !token ||
+  role !== "student"
+) {
+  alert("Unauthorized Access");
+  window.location.href =
+    "auth.html";
+}
+
+// ==================== STUDENT ====================
+
+async function loadStudent() {
+
+  const email =
+    localStorage.getItem(
+      "quiz_user_email"
+    );
+
+  document.getElementById(
+    "studentName"
+  ).innerText =
+    email || "Student";
+  document.getElementById(
+  "studentProfileName"
+  ).innerText =
+   email
+    ? email.split("@")[0]
+    : "Student";
+
+  document.getElementById(
+  "studentProfileEmail"
+  ).innerText =
+   email || "";
+
+  document.getElementById(
+    "name"
+  ).value =
+    email || "";
+
+  // Load assigned quizzes
+  loadQuizzes();
+
+  // Load leaderboard
+  // loadLeaderboard();
+}
+
+// ==================== QUIZZES ====================
+
+async function loadQuizzes() {
+
+  const list =
+    document.getElementById(
+      "quiz-list"
+    );
+
+  const email =
+    localStorage.getItem(
+      "quiz_user_email"
+    );
+
+  const token =
+    localStorage.getItem(
+      "quiz_access_token"
+    );
+
+  // GET ALL QUIZZES
+  const res =
+    await fetch(
+      `${apiBase}/quiz/list?email=${encodeURIComponent(email)}`
+    );
+
+  if (!res.ok) {
+
+    console.error(
+      await res.text()
+    );
+
+    return;
+  }
+
+  const data =
+    await res.json();
+
+  const allQuizzes =
+  data.quizzes || [];
+
+const quizzes =
+  allQuizzes.filter(q => {
+
+    if (!q.deadline)
+      return true;
+
+    return new Date(
+      q.deadline
+    ) > new Date();
+  });
+
+  // GET COMPLETED QUIZZES
+  const resultRes =
+  await fetch(
+    `${apiBase}/student/results?email=${encodeURIComponent(email)}`,
+    {
+      headers: {
+        Authorization:
+          `Bearer ${token}`
+      }
+    }
+  );
+
+  const resultData =
+    await resultRes.json();
+
+  const completedQuizIds =
+    (resultData.results || [])
+      .map(r => r.quizId);
+
+  const pendingQuizzes =
+    quizzes.filter(
+      q =>
+        !completedQuizIds.includes(
+          q.quizId
+        )
+    );
+
+  // DASHBOARD COUNTS
+const completed =
+  completedQuizIds.length;
+
+const pending =
+  pendingQuizzes.length;
+
+const totalAssigned =
+  completed + pending;
+
+document.getElementById(
+  "assignedCount"
+).innerText =
+  totalAssigned;
+
+document.getElementById(
+  "completedCount"
+).innerText =
+  completed;
+
+document.getElementById(
+  "pendingCount"
+).innerText =
+  pending;
+
+  let totalScore = 0;
+  let totalQuestions = 0;
+
+  (resultData.results || [])
+    .forEach(result => {
+
+      totalScore +=
+        result.score || 0;
+
+      totalQuestions +=
+        result.totalQuestions || 0;
+    });
+
+  const average =
+    totalQuestions > 0
+      ? Math.round(
+          (totalScore /
+            totalQuestions) *
+            100
+        )
+      : 0;
+
+  document.getElementById(
+    "averageScore"
+  ).innerText =
+    average + "%";
+
+  // QUIZ LIST
+  list.innerHTML = "";
+
+  if (
+    !pendingQuizzes.length
+  ) {
+
+    list.innerHTML =
+      "<p>No quizzes assigned.</p>";
+
+    return;
+  }
+
+  pendingQuizzes.forEach(
+    quiz => {
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+      div.className =
+        "quiz-card";
+
+      div.innerHTML = `
+        <h3>${quiz.title}</h3>
+        <p>
+          Deadline:
+          ${quiz.deadline || "No deadline"}
+        </p>
+
+        <button
+          onclick="startQuiz('${quiz.quizId}')"
+        >
+          Start Quiz
+        </button>
+      `;
+
+      list.appendChild(div);
+    }
+  );
+}
+
+
+// ==================== LEADERBOARD ====================
+
+// async function loadLeaderboard() {
+
+//   const board =
+//     document.getElementById(
+//       "leaderboard"
+//     );
+
+//   board.innerHTML =
+//     "<p>Select a quiz from History to view rankings.</p>";
+// }
+
+async function loadQuizHistory() {
+  const email =
+  localStorage.getItem(
+    "quiz_user_email"
+  );
+
+const token =
+  localStorage.getItem(
+    "quiz_access_token"
+  );
+
+  const history =
+    document.getElementById(
+      "quizHistory"
+    );
+ 
+  try {
+
+    const token =
+      localStorage.getItem(
+        "quiz_access_token"
+      );
+
+    const res =
+      await fetch(
+  `${apiBase}/student/results?email=${encodeURIComponent(email)}`,
+  {
+    headers:{
+      Authorization:
+        `Bearer ${token}`
+    }
+  }
+);
+
+    if (!res.ok) {
+
+      history.innerHTML =
+        "<p>Failed to load history.</p>";
+
+      return;
+    }
+
+    const data =
+      await res.json();
+
+    const results =
+      data.results || [];
+
+    if (!results.length) {
+
+      history.innerHTML =
+        "<p>No completed quizzes yet.</p>";
+
+      return;
+    }
+
+    history.innerHTML = "";
+
+    results.reverse().forEach(result => {
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+      div.className =
+        "history-card";
+
+      div.innerHTML = `
+
+  <h3>
+    ${result.quizTitle || "Quiz"}
+  </h3>
+
+  <p>
+    <strong>Quiz ID:</strong>
+    ${result.quizId}
+  </p>
+
+  <p>
+    <strong>Score:</strong>
+    ${result.score}
+    /
+    ${result.totalQuestions}
+  </p>
+
+  <p>
+    <strong>Submitted:</strong>
+    ${new Date(
+      result.submittedAt
+    ).toLocaleString()}
+  </p>
+
+  <button
+    onclick="
+      viewLeaderboard(
+        '${result.quizId}'
+      )
+    "
+  >
+    🏆 View Leaderboard
+  </button>
+`;
+
+      history.appendChild(div);
+
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    history.innerHTML =
+      "<p>Failed to load history.</p>";
+
+  }
+}
+
+// ==================== QUIZ ====================
+
+function startQuiz(id){
+
+  window.location.href =
+    `quiz.html?id=${id}`;
+}
+
+// ==================== LOGOUT ====================
+
+document.getElementById(
+  "logoutBtn"
+).onclick = ()=>{
+
+  localStorage.clear();
+
+  window.location.href =
+    "auth.html";
+};
+
+// ==================== MODAL ====================
+
+const modal =
+  document.getElementById(
+    "profileModal"
+  );
+
+document.getElementById(
+  "editProfileBtn"
+).onclick = ()=>{
+
+  modal.style.display =
+    "flex";
+};
+
+document.getElementById(
+  "closeModal"
+).onclick = ()=>{
+
+  modal.style.display =
+    "none";
+};
+
+document.getElementById(
+  "saveProfileBtn"
+).onclick = ()=>{
+
+  const name =
+    document
+      .getElementById(
+        "name"
+      )
+      .value;
+
+  document.getElementById(
+    "studentName"
+  ).innerText = name;
+
+  modal.style.display =
+    "none";
+};
+// ==================== QUIZ ====================
+async function loadStudyMaterials(){
+
+  const container =
+    document.getElementById(
+      "studyMaterials"
+    );
+
+  const email =
+    localStorage.getItem(
+      "quiz_user_email"
+    );
+
+  try{
+
+    const res =
+      await fetch(
+        `${apiBase}/study/list?email=${encodeURIComponent(email)}`
+      );
+
+    const data =
+      await res.json();
+
+ if(
+  !data.materials ||
+  !data.materials.length
+){
+
+  container.innerHTML = `
+    <div class="material-card">
+      No study materials assigned.
+    </div>
+  `;
+
+  return;
+}
+
+container.innerHTML = "";
+
+data.materials.forEach(material=>{
+
+  container.innerHTML += `
+    <div class="material-card">
+
+      <h3>
+        ${material.title}
+      </h3>
+
+      <a
+        href="${material.fileUrl}"
+        target="_blank"
+      >
+        📄 Open Material
+      </a>
+
+    </div>
+  `;
+});
+
+  }catch(err){
+
+    console.error(err);
+
+    container.innerHTML =
+      "<p>Failed to load materials.</p>";
+  }
+}
+
+
+function showSection(id,btn){
+
+  [
+    "dashboardSection",
+    "quizSection",
+    "studySection",
+    "historySection",
+    // "leaderboardSection"
+  ].forEach(section=>{
+
+    document.getElementById(
+      section
+    ).style.display =
+      "none";
+  });
+
+  document
+    .querySelectorAll(".tab-btn")
+    .forEach(button=>{
+
+      button.classList.remove(
+        "active"
+      );
+    });
+
+  btn.classList.add(
+    "active"
+  );
+
+  document.getElementById(
+    id
+  ).style.display =
+    "block";
+}
+
+async function viewLeaderboard(
+  quizId
+){
+
+  const board =
+    document.getElementById(
+      "leaderboard"
+    );
+
+  board.style.display =
+    "block";
+
+  board.innerHTML =
+    "<p>Loading leaderboard...</p>";
+
+  try {
+
+    const res =
+      await fetch(
+        `${apiBase}/leaderboard?quizId=${quizId}`
+      );
+
+    const data =
+      await res.json();
+
+    if (
+      !data.leaderboard ||
+      !data.leaderboard.length
+    ) {
+
+      board.innerHTML =
+        "<p>No rankings found.</p>";
+
+      return;
+    }
+
+    board.innerHTML =
+      `
+      <div class="section-card">
+        <h2>
+          🏆 ${data.quizTitle || "Quiz"} Leaderboard
+        </h2>
+
+        ${
+          data.leaderboard
+          .map(item => `
+            <div class="history-card">
+
+              <strong>
+                #${item.rank}
+              </strong>
+
+              ${item.student}
+
+              -
+
+              ${item.score}
+              /
+              ${item.totalQuestions}
+
+            </div>
+          `)
+          .join("")
+        }
+      </div>
+      `;
+
+  } catch(err){
+
+    console.error(err);
+
+    board.innerHTML =
+      "<p>Failed to load leaderboard.</p>";
+  }
+}
+
+// ==================== INIT ====================
+
+loadStudent();
+loadQuizzes();
+// loadLeaderboard();
+loadQuizHistory();
+loadStudyMaterials();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,801 @@
+/* =========================
+   QUIZFORGE AUTH PAGE
+========================= */
+
+:root{
+
+--bg:#05071B;
+--bg2:#0B1030;
+
+--card:#0F1435;
+--card2:#151B47;
+
+--primary:#7C5CFF;
+--primary-dark:#6546FF;
+
+--text:#FFFFFF;
+--muted:#8A90B8;
+
+--border:#252B63;
+
+--success:#34D399;
+
+--shadow:
+0 20px 60px rgba(0,0,0,.35);
+
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+
+font-family:'Poppins',sans-serif;
+
+background:
+radial-gradient(
+circle at top,
+#11164A 0%,
+#05071B 55%
+);
+
+color:var(--text);
+
+min-height:100vh;
+
+display:flex;
+justify-content:center;
+padding:40px 20px;
+
+overflow-x:hidden;
+
+}
+
+.auth-container{
+    width:100%;
+    min-height:100vh;
+    max-width:none;
+    margin:0;
+    padding:0;
+    background:transparent;
+    border:none;
+    border-radius:0;
+}
+.main-content{
+    width:100%;
+    text-align:center;
+}
+
+/* =====================
+   HEADER
+===================== */
+
+.top-nav{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:28px 32px;
+
+}
+
+.logo-wrap{
+
+display:flex;
+align-items:center;
+gap:16px;
+
+}
+
+.logo-icon{
+
+width:56px;
+height:56px;
+
+border-radius:18px;
+
+background:
+linear-gradient(
+135deg,
+#8B6FFF,
+#5D46E8
+);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:24px;
+
+}
+
+.logo-text{
+
+font-size:28px;
+font-weight:700;
+
+}
+
+.link-btn{
+
+height:58px;
+padding:0 26px;
+
+background:transparent;
+
+border:1px solid #2A3273;
+
+border-radius:20px;
+
+color:white;
+
+font-size:18px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.link-btn:hover{
+
+background:#151B47;
+
+}
+
+/* =====================
+   HERO
+===================== */
+/* .logo-icon{
+    width:44px;
+    height:44px;
+}
+
+.logo-text{
+    font-size:22px;
+} */
+
+.hero{
+
+padding:10px 40px 0;
+
+text-align:center;
+
+}
+
+.platform-badge{
+
+display:inline-flex;
+
+align-items:center;
+gap:10px;
+
+padding:10px 24px;
+
+border-radius:999px;
+
+background:#1A1F52;
+
+border:1px solid #343C8F;
+
+color:#B8BCFF;
+
+font-size:18px;
+
+margin-bottom:35px;
+
+}
+
+.platform-badge::before{
+
+content:"";
+
+width:10px;
+height:10px;
+
+background:#32D583;
+
+border-radius:50%;
+
+}
+
+.hero h1{
+
+font-size:48px;
+
+line-height:1.05;
+
+font-weight:800;
+
+margin-bottom:28px;
+
+}
+
+.hero h1 span{
+
+display:block;
+
+background:
+linear-gradient(
+90deg,
+#8B6FFF,
+#A88CFF
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+}
+
+.hero p{
+
+max-width:720px;
+
+margin:auto;
+
+font-size:18px;
+
+line-height:1.8;
+
+color:var(--muted);
+
+}
+
+/* =====================
+   TOGGLE
+===================== */
+
+.role-toggle{
+    margin: 25px auto;
+    width: 100%;
+    max-width: 550px;   /* controls overall toggle width */
+    background: #171C46;
+    padding: 5px;
+    border-radius: 20px;
+    display: flex;
+}
+
+.role-btn{
+    flex: 1;
+    height: 42px;       /* smaller height */
+    border: none;
+    background: transparent;
+    color: #8E95BF;
+    font-size: 15px;    /* smaller text */
+    font-weight: 600;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.role-btn.active{
+    background: linear-gradient(
+        90deg,
+        #8B6FFF,
+        #6546FF
+    );
+    color: white;
+}
+
+/* =====================
+   LOGIN CARD
+===================== */
+
+.login-card{
+    width:100%;
+    max-width:480px;   /* 480-550px looks good */
+    margin:0 auto;
+
+    background:#0E1336;
+    border:1px solid var(--border);
+    border-radius:34px;
+    padding:40px;
+}
+
+.card-top{
+
+display:flex;
+align-items:center;
+gap:18px;
+
+margin-bottom:28px;
+
+}
+
+.icon-circle{
+
+width:62px;
+height:62px;
+
+border-radius:20px;
+
+background:#1C2258;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:28px;
+
+}
+
+.card-top h2{
+
+font-size:22px;
+font-weight:700;
+
+}
+
+.card-top p{
+
+color:var(--muted);
+
+font-size:14px;
+
+}
+
+/* =====================
+   INPUTS
+===================== */
+
+input,
+select{
+
+width:100%;
+
+height:52px;
+font-size:16px;
+
+background:#181D49;
+
+border:1px solid #2E357C;
+
+border-radius:22px;
+
+padding:0 24px;
+
+color:white;
+
+/* font-size:22px; */
+
+outline:none;
+
+margin-top:18px;
+
+}
+
+input::placeholder{
+
+color:#7F86B4;
+
+}
+
+.row-between{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+margin:24px 0;
+
+font-size:18px;
+
+color:var(--muted);
+
+}
+
+.forgot-link{
+
+background:none;
+border:none;
+
+color:#8D6FFF;
+
+font-size:18px;
+
+cursor:pointer;
+
+}
+
+/* =====================
+   BUTTON
+===================== */
+
+.primary-btn{
+
+width:100%;
+
+height:78px;
+
+border:none;
+
+border-radius:24px;
+
+background:
+linear-gradient(
+90deg,
+#8B6FFF,
+#6546FF
+);
+
+color:white;
+
+font-size:30px;
+
+font-weight:700;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.primary-btn:hover{
+
+transform:translateY(-2px);
+
+}
+
+/* =====================
+   SIGNUP
+===================== */
+
+.divider{
+
+height:1px;
+
+background:#20275F;
+
+margin:28px 0;
+
+}
+
+.create-account-btn{
+
+background:none;
+border:none;
+
+width:100%;
+
+color:#A88CFF;
+
+font-size:28px;
+
+font-weight:700;
+
+cursor:pointer;
+
+}
+
+.signup-link{
+
+text-align:center;
+margin-top:22px;
+
+color:var(--muted);
+
+font-size:20px;
+
+}
+
+/* =====================
+   STATS
+===================== */
+
+.stats-section{
+    margin-top: 30px;
+    padding: 20px 20px;
+    border-top: 1px solid var(--border);
+
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px;
+
+    align-items: center;
+}
+.stat-number{
+    font-size: 2rem;      /* was probably 2.5rem+ */
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.stat-label{
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+.stat-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+}
+.stat-card{
+
+text-align:center;
+
+}
+
+.stat-card h3{
+
+font-size:28px;
+
+font-weight:800;
+
+margin-bottom:10px;
+
+}
+
+.stat-card span{
+
+color:var(--muted);
+
+font-size:22px;
+
+}
+
+/* =====================
+   QUICK QUIZ
+===================== */
+
+.quick-panel{
+
+width:85%;
+
+margin:auto;
+
+background:#0E1336;
+
+border:1px solid var(--border);
+
+padding:40px;
+
+border-radius:30px;
+
+}
+
+.quick-header{
+
+margin-bottom:20px;
+
+}
+
+.back-btn{
+
+background:none;
+border:none;
+
+color:#8B6FFF;
+
+font-size:20px;
+
+cursor:pointer;
+
+margin-bottom:15px;
+
+}
+
+/* =====================
+   MODALS
+===================== */
+
+.modal{
+
+display:none;
+
+position:fixed;
+
+inset:0;
+
+background:
+rgba(0,0,0,.75);
+
+justify-content:center;
+align-items:center;
+
+z-index:999;
+
+}
+
+.modal-content{
+
+width:90%;
+max-width:550px;
+
+background:#10163D;
+
+border:1px solid #283172;
+
+padding:35px;
+
+border-radius:30px;
+
+position:relative;
+
+}
+
+.modal-content h2{
+
+margin-bottom:20px;
+
+}
+
+.close-btn{
+
+position:absolute;
+
+right:22px;
+top:18px;
+
+cursor:pointer;
+
+font-size:24px;
+
+}
+
+.hidden{
+
+display:none;
+
+}
+
+/* =====================
+   MOBILE
+===================== */
+
+@media (max-width:768px){
+
+.auth-container{
+    max-width:390px;
+    border-radius:0;
+}
+
+.top-nav{
+    padding:20px;
+}
+
+.logo-icon{
+    width:40px;
+    height:40px;
+}
+
+.logo-text{
+    font-size:18px;
+}
+
+.link-btn{
+    height:44px;
+    padding:0 16px;
+    font-size:14px;
+}
+
+.hero{
+    padding:10px 20px 0;
+}
+
+.platform-badge{
+    font-size:13px;
+    padding:8px 16px;
+    margin-bottom:20px;
+}
+
+.hero h1{
+    font-size:30px;
+    line-height:1.1;
+    margin-bottom:16px;
+}
+
+.hero p{
+    font-size:14px;
+    line-height:1.6;
+}
+
+.role-toggle{
+    width: min(500px, 90%);
+    margin: 30px auto 20px;
+    max-width:600px;
+    background:#171C46;
+    padding:8px;
+    border-radius:26px;
+    display:flex;
+}
+.hero-content{
+    max-width:900px;
+    margin:0 auto;
+}
+
+.role-btn{
+    height:48px;
+    font-size:18px;
+}
+
+.login-card{
+    width:92%;
+    padding:20px;
+}
+
+.icon-circle{
+    width:44px;
+    height:44px;
+    font-size:18px;
+}
+
+.card-top h2{
+    font-size:18px;
+}
+
+.card-top p{
+    font-size:12px;
+}
+
+input,
+select{
+    height:52px;
+    font-size:15px;
+    border-radius:14px;
+}
+
+.row-between{
+    font-size:13px;
+}
+
+.forgot-link{
+    font-size:13px;
+}
+
+.primary-btn{
+    height:58px;
+    font-size:18px;
+    border-radius:16px;
+}
+
+.signup-link{
+    font-size:14px;
+}
+
+.create-account-btn{
+    font-size:16px;
+}
+
+.stats-section{
+    padding:24px 10px;
+}
+
+.stat-card h3{
+    font-size:24px;
+}
+
+.stat-card span{
+    font-size:12px;
+}
+
+}
+.row-between input[type="checkbox"]{
+    width:16px;
+    height:16px;
+    margin:0 8px 0 0;
+}
+/* OTP MODAL */
+
+.otp-modal{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.8);
+
+  justify-content: center;
+  align-items: center;
+
+  z-index: 99999;
+
+  display:none;
+}
+
+.otp-modal.show{
+  display:flex;
+}
+

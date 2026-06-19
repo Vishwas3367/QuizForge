@@ -1,0 +1,178 @@
+service: quiz-backend
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-south-1
+  stage: dev
+
+  environment:
+    USERS_TABLE: Users
+    QUIZ_TABLE: Quiz
+    RESULTS_TABLE: Results
+    JWT_SECRET: quiz-platform-secret-key
+    SNS_TOPIC_ARN: arn:aws:sns:ap-south-1:830146370839:quiz-alerts
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:Scan
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - ses:SendEmail
+            - ses:SendRawEmail
+            - sns:Publish
+            - s3:PutObject
+            - cognito-idp:AdminGetUser
+          Resource:
+            - arn:aws:dynamodb:ap-south-1:*:table/Users
+            - arn:aws:dynamodb:ap-south-1:*:table/Quiz
+            - arn:aws:dynamodb:ap-south-1:*:table/Results
+            - "*"
+            - arn:aws:cognito-idp:ap-south-1:830146370839:userpool/ap-south-1_TNiaR3eYC
+
+functions:
+
+  register:
+    handler: functions/auth/register.handler
+    events:
+      - http:
+          path: auth/register
+          method: post
+          cors: true
+
+  login:
+    handler: login.handler
+    events:
+      - http:
+          path: auth/login
+          method: post
+          cors: true
+
+  forgotPassword:
+    handler: functions/auth/forgotPassword.handler
+    events:
+      - http:
+          path: auth/forgot
+          method: post
+          cors: true
+
+  resetPassword:
+    handler: functions/auth/resetPassword.handler
+    events:
+      - http:
+          path: auth/reset
+          method: post
+          cors: true
+
+  createQuiz:
+    handler: create.handler
+    events:
+      - http:
+          path: quiz/create
+          method: post
+          cors: true
+
+  getQuiz:
+    handler: functions/quiz/getQuiz.handler
+    events:
+      - http:
+          path: quiz/{id}
+          method: get
+          cors: true
+
+  listQuizzes:
+    handler: functions/quiz/listQuizzes.handler
+    events:
+      - http:
+          path: quiz/list
+          method: get
+          cors: true
+
+  submitQuiz:
+    handler: functions/quiz/submitQuiz.handler
+    events:
+      - http:
+          path: quiz/{id}/submit
+          method: post
+          cors: true
+
+  getLeaderboard:
+    handler: functions/leaderboard/getLeaderboard.handler
+    events:
+      - http:
+          path: leaderboard
+          method: get
+          cors: true
+  getResults:
+    handler: functions/student/getResults.handler
+    events:
+      - http:
+          path: student/results
+          method: get
+          cors: true
+  getTeacherAnalytics:
+    handler: functions/analytics/getTeacherAnalytics.handler
+    events:
+      - http:
+          path: analytics/teacher
+          method: get
+          cors: true
+  uploadFile:
+    handler: functions/upload/uploadFile.handler
+    events:
+      - http:
+          path: upload/file
+          method: post
+          cors: true
+  uploadStudyMaterial:
+    handler: functions/study/uploadStudyMaterial.handler
+    events:
+      - http:
+          path: study/upload
+          method: post
+          cors: true
+  getStudyMaterials:
+    handler: functions/study/getStudyMaterials.handler
+    events:
+     - http:
+        path: study/list
+        method: get
+        cors: true
+  confirmSignup:
+    handler: functions/auth/confirmSignup.handler
+    events:
+     - http:
+        path: auth/confirm
+        method: post
+        cors: true
+  getQuizResults:
+    handler: functions/analytics/getQuizResults.handler
+    events:
+      - http:
+          path: quiz/{id}/results
+          method: get
+          cors: true
+  deleteQuiz:
+    handler: functions/quiz/deleteQuiz.handler
+    events:
+     - http:
+        path: quiz/{id}
+        method: delete
+        cors: true
+  updateQuiz:
+    handler: functions/quiz/updateQuiz.handler
+    events:
+     - http:
+        path: quiz/{id}
+        method: put
+        cors: true
+
+plugins:
+  - serverless-offline

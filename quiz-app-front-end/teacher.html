@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Teacher Dashboard</title>
+
+  <link rel="stylesheet" href="teacher.css">
+</head>
+<body>
+
+<header class="header">
+  <h2>Teacher Dashboard</h2>
+
+  <div>
+    <span id="teacher-name">Teacher</span>
+    |
+    <span id="teacher-email"></span>
+
+    <button id="edit-profile-btn">
+      Edit Profile
+    </button>
+    <button id="logout">
+      Logout
+    </button>
+  </div>
+</header>
+
+<div class="dashboard-layout">
+
+  <aside class="sidebar">
+
+    <h3>Teacher Panel</h3>
+
+    <button onclick="showSection('dashboardSection')">
+      Dashboard
+    </button>
+
+    <button onclick="showSection('createQuizSection')">
+      Create Quiz
+    </button>
+
+    <button onclick="showSection('myQuizzesSection')">
+      My Quizzes
+    </button>
+
+    <button onclick="showSection('studySection')">
+      Study Materials
+    </button>
+
+    <button onclick="showSection('analyticsSection')">
+      Analytics
+    </button>
+
+  </aside>
+
+  <main class="container main-content">
+  <div id="createQuizSection">
+  <h2>Create Quiz</h2>
+<select id="question-type">
+
+  <option value="text">
+    Text Question
+  </option>
+
+  <option value="image">Image Question</option>
+
+</select>
+<div
+  id="image-question-section"
+  style="display:none;"
+>
+
+  <label>
+    Upload Question Image
+  </label>
+
+  <input
+    type="file"
+    id="question-image"
+    accept="image/*"
+  />
+</div>
+
+  <textarea
+    id="quiz-question"
+    placeholder="Enter Question"
+  ></textarea>
+
+  <label>
+    Number of Options
+  </label>
+
+  <input
+    id="option-count"
+    type="number"
+    min="2"
+    max="6"
+    value="4"
+  >
+
+  <div id="option-inputs"></div>
+
+  <input
+    id="quiz-answer"
+    
+    type="text"
+    placeholder="Correct Answer"
+  > 
+
+  <button id="add-question">
+    Add Question
+  </button>
+
+  <h3>Questions Added</h3>
+  <div id="question-list"></div>
+  <h3>Quiz Details</h3>
+
+<input
+  id="quiz-title"
+  type="text"
+  placeholder="Quiz Title"
+/>
+
+<textarea
+  id="assignedStudents"
+  placeholder="student1@gmail.com, student2@gmail.com"
+></textarea>
+
+<input
+  type="datetime-local"
+  id="deadline"
+/>
+
+<button id="create-quiz">
+  Publish Quiz
+</button>
+</div>
+  <div
+  id="myQuizzesSection"
+  style="display:none;"
+  >
+  <h3>My Quizzes</h3>
+
+  <div id="teacher-quizzes">
+  Loading quizzes...
+  </div>
+  </div>
+<div
+  id="studySection"
+  style="display:none;"
+>
+<h2>Study Materials</h2>
+
+<input
+  id="material-title"
+  type="text"
+  placeholder="Material Title"
+/>
+
+<input
+  id="study-file"
+  type="file"
+/>
+
+<textarea
+  id="material-students"
+  placeholder="student1@gmail.com, student2@gmail.com"
+></textarea>
+
+<button
+  id="upload-study-material"
+>
+  Upload Material
+</button>
+
+<div
+  id="study-material-list"
+></div>
+</div>
+  <div
+  id="analyticsSection"
+  class="analytics-section"
+  style="display:none;"
+>
+  <h2>
+    Teacher Analytics
+  </h2>
+
+  <div class="analytics-grid">
+
+    <div class="analytics-card">
+      <h3 id="totalQuizzes">
+        0
+      </h3>
+      <p>Total Quizzes</p>
+    </div>
+
+    <div class="analytics-card">
+      <h3 id="totalAttempts">
+        0
+      </h3>
+      <p>Total Attempts</p>
+    </div>
+
+    <div class="analytics-card">
+      <h3 id="averageClassScore">
+        0%
+      </h3>
+      <p>Average Score</p>
+    </div>
+
+  </div>
+
+  <div id="teacherQuizAnalytics">
+    Loading analytics...
+  </div>
+
+</div>
+<div
+  id="dashboardSection"
+  style="display:none;"
+>
+
+  <h2>Dashboard</h2>
+
+  <div class="analytics-grid">
+
+    <div class="analytics-card">
+      <h3 id="dashboardTotalQuizzes">0</h3>
+      <p>Total Quizzes</p>
+    </div>
+
+    <div class="analytics-card">
+      <h3 id="dashboardTotalAttempts">0</h3>
+      <p>Total Attempts</p>
+    </div>
+
+    <div class="analytics-card">
+      <h3 id="dashboardAverageScore">0%</h3>
+      <p>Average Score</p>
+    </div>
+
+  </div>
+
+</div>
+</main>
+
+</div>
+
+<!-- Profile Modal -->
+
+<div
+  id="profileModal"
+  class="modal"
+  style="display:none;"
+>
+  <div class="modal-content">
+
+    <span
+      id="closeProfile"
+      style="cursor:pointer;"
+    >
+      ✖
+    </span>
+
+    <h3>Edit Profile</h3>
+
+<input
+  id="profileName"
+  type="text"
+  placeholder="New Name"
+>
+
+<input
+  id="profilePassword"
+  type="password"
+  placeholder="New Password"
+>
+
+<button id="saveProfile">
+  Save
+</button>
+
+  </div>
+</div>
+
+<div
+  id="publishModal"
+  class="modal"
+  style="display:none;"
+>
+
+  <div class="publish-card">
+
+    <div class="publish-icon">
+      🚀
+    </div>
+
+    <h2>
+      Publish Quiz
+    </h2>
+
+    <p class="publish-subtitle">
+      Ready to assign this quiz?
+    </p>
+
+    <div class="publish-info">
+
+      <div>
+        📚
+        <span id="previewQuizTitle"></span>
+      </div>
+
+      <div>
+        ❓
+        <span id="previewQuestionCount"></span>
+        Questions
+      </div>
+
+      <div>
+        👨‍🎓
+        Students Assigned
+      </div>
+
+    </div>
+
+    <div class="publish-actions">
+
+      <button
+        class="cancel-btn"
+        onclick="closePublishModal()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="publish-btn"
+        onclick="confirmPublish()"
+      >
+        🚀 Publish Quiz
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div
+  id="successModal"
+  class="modal"
+  style="display:none;"
+>
+  <div class="modal-content">
+
+    <h3>
+      🎉 Quiz Created Successfully
+    </h3>
+
+    <div id="successMessage"></div>
+
+    <button
+      onclick="
+      document.getElementById('successModal').style.display='none'
+      "
+    >
+      Close
+    </button>
+
+  </div>
+</div>
+
+<div
+  id="resultsModal"
+  class="modal"
+  style="display:none;"
+>
+  <div class="modal-content">
+
+    <span
+      style="cursor:pointer;"
+      onclick="
+      document.getElementById(
+        'resultsModal'
+      ).style.display='none'
+      "
+    >
+      ✖
+    </span>
+
+    <h2>
+      Quiz Results
+    </h2>
+
+    <div id="resultsTable"></div>
+
+  </div>
+</div>
+
+<div
+  id="editQuizModal"
+  class="modal"
+  style="display:none;"
+>
+  <div class="modal-content">
+
+    <h2>Edit Quiz</h2>
+
+    <input
+      id="editQuizTitle"
+      placeholder="Quiz Title"
+    >
+
+    <input
+      id="editDeadline"
+      type="datetime-local"
+    >
+
+    <textarea
+      id="editStudents"
+      placeholder="student1@gmail.com, student2@gmail.com"
+    ></textarea>
+
+    <div
+      id="editQuestions"
+    ></div>
+
+    <button
+      onclick="addEditQuestion()"
+    >
+      ➕ Add Question
+    </button>
+
+    <button
+      onclick="saveQuizChanges()"
+    >
+      💾 Save Changes
+    </button>
+
+  </div>
+</div>
+
+<script>
+const apiBase = "https://ti3d0a29rd.execute-api.ap-south-1.amazonaws.com/dev";
+
+let quizQuestions = [];
+let pendingQuizTitle = "";
+let editingQuizId = "";
+let editingQuestions = [];
+
+// ==================== AUTH CHECK ====================
+
+window.onload = () => {
+  const token = localStorage.getItem("quiz_access_token");
+  const role = localStorage.getItem("quiz_user_role");
+
+  if (!token || role !== "teacher") {
+    alert("Unauthorized Access");
+    window.location.href = "auth.html";
+    return;
+  }
+
+  document.getElementById("teacher-email").textContent =
+    localStorage.getItem("quiz_user_email") || "";
+
+  document.getElementById("teacher-name").textContent = "Teacher";
+
+  generateOptionInputs(
+    document.getElementById("option-count").value
+  );
+};
+
+// ==================== OPTIONS ====================
+
+function generateOptionInputs(count) {
+  const container = document.getElementById("option-inputs");
+  container.innerHTML = "";
+
+  for (let i = 1; i <= count; i++) {
+    const input = document.createElement("input");
+    input.placeholder = `Option ${i}`;
+    input.id = `opt-${i}`;
+    container.appendChild(input);
+  }
+}
+
+document
+  .getElementById("option-count")
+  .addEventListener("change", (e) => {
+    generateOptionInputs(e.target.value);
+  });
+
+// ==================== ADD QUESTION ====================
+document.getElementById(
+  "question-type"
+).addEventListener(
+  "change",
+  function(){
+
+    const section =
+    document.getElementById(
+      "image-question-section"
+    );
+
+    if(
+      this.value === "image"
+    ){
+
+      section.style.display =
+      "block";
+
+    }else{
+
+      section.style.display =
+      "none";
+    }
+  }
+);
+document.getElementById("add-question").onclick = async () => {
+  console.log("ADD QUESTION CLICKED");
+  const count = Number(
+    document.getElementById("option-count").value
+  );
+
+  const options = [];
+
+  for (let i = 1; i <= count; i++) {
+    const value = document
+      .getElementById(`opt-${i}`)
+      .value.trim();
+
+    if (value) {
+      options.push(value);
+    }
+  }
+
+  const question = document
+    .getElementById("quiz-question")
+    .value.trim();
+  const questionType =
+  document.getElementById(
+  "question-type"
+).value;
+
+  const imageFile =
+  document.getElementById(
+  "question-image"
+).files[0];
+let fileUrl = "";
+
+if (
+  questionType === "image" &&
+  imageFile
+) {
+
+  console.log("STARTING IMAGE UPLOAD");
+
+  const base64 =
+  await new Promise(
+    (resolve, reject) => {
+
+      const reader =
+      new FileReader();
+
+      reader.onload = () => {
+        console.log("FILE READ OK");
+        resolve(
+          reader.result.split(",")[1]
+        );
+      };
+
+      reader.onerror = reject;
+
+      reader.readAsDataURL(
+        imageFile
+      );
+    }
+  );
+
+  console.log("SENDING TO LAMBDA");
+  console.log("IMAGE SIZE:", imageFile.size);
+  console.log("BASE64 LENGTH:", base64.length);
+  const token =
+localStorage.getItem(
+  "quiz_access_token"
+);
+
+const uploadRes =
+await fetch(
+  `${apiBase}/upload/file`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type":
+      "application/json",
+      Authorization:
+      `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      fileName: imageFile.name,
+      fileContent: base64,
+      fileType: imageFile.type
+    })
+  }
+);
+
+if (!uploadRes.ok) {
+  throw new Error(
+    "Image upload failed"
+  );
+}
+
+const uploadData =
+await uploadRes.json();
+
+if (!uploadData.fileUrl) {
+  throw new Error(
+    "No image URL returned"
+  );
+}
+
+fileUrl =
+uploadData.fileUrl;
+
+}
+
+   const answer = document
+  .getElementById("quiz-answer")
+  .value.trim();
+
+// Validation
+if (
+  (questionType === "text" && !question) ||
+  !answer ||
+  options.length < 2
+) {
+  alert("Please complete the question.");
+  return;
+}
+
+if (
+  questionType === "image" &&
+  !imageFile
+) {
+  alert("Please select an image.");
+  return;
+}
+
+quizQuestions.push({
+
+  type: questionType,
+
+  question,
+
+  options,
+
+  answer,
+
+  fileUrl
+  
+
+});
+console.log(
+  "QUESTION PUSHED"
+);
+
+console.log(
+  quizQuestions
+);
+
+  renderQuestions();
+
+  document.getElementById("quiz-question").value = "";
+  document.getElementById("quiz-answer").value = "";
+
+  for (let i = 1; i <= count; i++) {
+    document.getElementById(`opt-${i}`).value = "";
+  }
+};
+
+// ==================== CONFIRM CREATE ====================
+
+async function confirmPublish() {
+
+  const createBtn =
+    document.getElementById(
+      "create-quiz"
+    );
+
+  createBtn.disabled = true;
+// HERE I WILL PLACE THAT CODE?
+  
+createBtn.disabled = true;
+
+console.log("PUBLISH CLICKED");
+
+console.log({
+  title:
+    document.getElementById(
+      "quiz-title"
+    ).value.trim(),
+
+  questions:
+    quizQuestions,
+
+  assignedStudents:
+    document
+      .getElementById(
+        "assignedStudents"
+      )
+      .value,
+
+  deadline:
+    document
+      .getElementById(
+        "deadline"
+      )
+      .value
+});
+
+  const token =
+    localStorage.getItem(
+      "quiz_access_token"
+    );
+
+  const assignedStudents =
+    document
+      .getElementById(
+        "assignedStudents"
+      )
+      .value
+      .split(",")
+      .map(x => x.trim())
+      .filter(x => x);
+
+  const deadline =
+    document
+      .getElementById(
+        "deadline"
+      )
+      .value;
+
+  try {
+
+    const res =
+      await fetch(
+        `${apiBase}/quiz/create`,
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json",
+
+            Authorization:
+              `Bearer ${token}`
+          },
+
+          body: JSON.stringify({
+
+            title:
+              document
+              .getElementById(
+                "quiz-title"
+              )
+              .value
+              .trim(),
+
+            questions:
+              quizQuestions,
+
+            assignedStudents,
+
+            deadline
+          })
+        }
+      );
+    
+    const data =
+      await res.json();
+
+    if(!res.ok){
+      throw new Error(
+        data.error ||
+        "Failed to create quiz"
+      );
+    }
+
+    document.getElementById(
+      "publishModal"
+    ).style.display =
+      "none";
+
+    const quizLink =
+`${window.location.origin}/quiz.html?id=${data.quizId}`;
+
+document.getElementById(
+  "successMessage"
+).innerHTML = `
+  <b>🎉 Quiz Published Successfully</b>
+  <br><br>
+
+  <b>Quiz ID:</b>
+  ${data.quizId}
+
+  <br><br>
+
+  <b>Share Code:</b>
+  ${data.shareCode || "N/A"}
+
+  <br><br>
+
+  <input
+    id="quizLinkBox"
+    value="${data.quizLink}"
+    readonly
+    style="
+      width:100%;
+      padding:10px;
+      border-radius:8px;
+    "
+  >
+
+  <br><br>
+
+  <button
+    onclick="
+      navigator.clipboard.writeText(
+        document.getElementById(
+          'quizLinkBox'
+        ).value
+      );
+      alert('Link Copied');
+    "
+  >
+    📋 Copy Quiz Link
+  </button>
+`;
+
+quizQuestions = [];
+
+renderQuestions();
+
+document.getElementById(
+  "quiz-title"
+).value = "";
+
+document.getElementById(
+  "assignedStudents"
+).value = "";
+
+document.getElementById(
+  "deadline"
+).value = "";
+
+document.getElementById(
+  "successModal"
+).style.display =
+  "flex";
+
+  } catch(err){
+
+    alert(
+      err.message
+    );
+  }
+
+  createBtn.disabled = false;
+}
+
+
+
+document.getElementById("edit-profile-btn").onclick =
+  () => {
+    document.getElementById(
+      "profileModal"
+    ).style.display = "flex";
+  };
+
+document.getElementById("closeProfile").onclick =
+  () => {
+    document.getElementById(
+      "profileModal"
+    ).style.display = "none";
+  };
+
+
+document.getElementById(
+  "upload-study-material"
+).onclick = async () => {
+
+  const title =
+    document.getElementById(
+      "material-title"
+    ).value.trim();
+
+  const file =
+    document.getElementById(
+      "study-file"
+    ).files[0];
+
+  const assignedStudents =
+    document.getElementById(
+      "material-students"
+    )
+    .value
+    .split(",")
+    .map(x => x.trim())
+    .filter(x => x);
+
+  if (!title) {
+    alert("Enter title");
+    return;
+  }
+
+  if (!file) {
+    alert("Select file");
+    return;
+  }
+
+  const base64 =
+    await new Promise(
+      (resolve,reject)=>{
+
+        const reader =
+          new FileReader();
+
+        reader.onload =
+          ()=>{
+
+            resolve(
+              reader.result
+              .split(",")[1]
+            );
+          };
+
+        reader.onerror =
+          reject;
+
+        reader.readAsDataURL(
+          file
+        );
+      }
+    );
+
+  const uploadRes =
+    await fetch(
+      `${apiBase}/upload/file`,
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+          "application/json"
+        },
+
+        body:JSON.stringify({
+
+          fileName:
+          file.name,
+
+          fileContent:
+          base64,
+
+          fileType:
+          file.type
+        })
+      }
+    );
+
+  const uploadData =
+    await uploadRes.json();
+
+  const fileUrl =
+    uploadData.fileUrl;
+
+  await fetch(
+    `${apiBase}/study/upload`,
+    {
+      method:"POST",
+
+      headers:{
+        "Content-Type":
+        "application/json"
+      },
+
+      body:JSON.stringify({
+
+        materialId:
+          crypto.randomUUID(),
+
+        title,
+
+        fileUrl,
+
+        assignedStudents,
+
+        teacherEmail:
+        localStorage.getItem(
+          "quiz_user_email"
+        )
+      })
+    }
+  );
+
+  alert(
+    "Study Material Uploaded"
+  );
+
+  document.getElementById(
+    "material-title"
+  ).value = "";
+
+  document.getElementById(
+    "material-students"
+  ).value = "";
+
+  document.getElementById(
+    "study-file"
+  ).value = "";
+};
+
+// ==================== LOGOUT ====================
+
+document.getElementById("logout").onclick = () => {
+  localStorage.clear();
+  window.location.href = "auth.html";
+};
+// async function loadTeacherAnalytics(){
+
+//   // const res =
+//   //   await fetch(
+//   //     `${apiBase}/analytics/teacher`
+//   //   );
+//   const token =
+//   localStorage.getItem(
+//     "quiz_access_token"
+//   );
+
+// const res =
+//   await fetch(
+//     `${apiBase}/analytics/teacher`,
+//     {
+//       headers:{
+//         Authorization:
+//           `Bearer ${token}`
+//       }
+//     }
+//   );
+
+//   const data =
+//     await res.json();
+
+//   document.getElementById(
+//     "totalQuizzes"
+//   ).innerText =
+//     data.totalQuizzes || 0;
+
+//   document.getElementById(
+//     "totalAttempts"
+//   ).innerText =
+//     data.totalAttempts || 0;
+
+//   document.getElementById(
+//     "averageClassScore"
+//   ).innerText =
+//     (data.averageScore || 0)
+//     + "%";
+
+//   // ADD THESE 3 LINES
+
+//   document.getElementById(
+//     "dashboardTotalQuizzes"
+//   ).innerText =
+//     data.totalQuizzes || 0;
+
+//   document.getElementById(
+//     "dashboardTotalAttempts"
+//   ).innerText =
+//     data.totalAttempts || 0;
+
+//   document.getElementById(
+//     "dashboardAverageScore"
+//   ).innerText =
+//     (data.averageScore || 0)
+//     + "%";
+
+//   // rest of your code...
+// }
+
+/* ==================== INIT ==================== */
+
+document.getElementById(
+  "teacher-name"
+).innerText =
+  localStorage.getItem(
+    "quiz_user_name"
+  ) || "Teacher";
+
+document.getElementById(
+  "teacher-email"
+).innerText =
+  localStorage.getItem(
+    "quiz_user_email"
+  ) || "";
+
+loadTeacherAnalytics();
+loadTeacherQuizzes();
+
+async function loadTeacherAnalytics(){
+
+  // const res =
+  //   await fetch(
+  //     `${apiBase}/analytics/teacher`
+  //   );
+  const token =
+  localStorage.getItem(
+    "quiz_access_token"
+  );
+
+const res =
+  await fetch(
+    `${apiBase}/analytics/teacher`,
+    {
+      headers:{
+        Authorization:
+          `Bearer ${token}`
+      }
+    }
+  );
+
+  const data =
+    await res.json();
+
+  document.getElementById(
+    "totalQuizzes"
+  ).innerText =
+    data.totalQuizzes || 0;
+
+  document.getElementById(
+    "totalAttempts"
+  ).innerText =
+    data.totalAttempts || 0;
+
+  document.getElementById(
+    "averageClassScore"
+  ).innerText =
+    (data.averageScore || 0)
+    + "%";
+
+  document.getElementById(
+    "dashboardTotalQuizzes"
+  ).innerText =
+    data.totalQuizzes || 0;
+
+  document.getElementById(
+    "dashboardTotalAttempts"
+  ).innerText =
+    data.totalAttempts || 0;
+
+  document.getElementById(
+    "dashboardAverageScore"
+  ).innerText =
+    (data.averageScore || 0)
+    + "%";
+
+  const container =
+    document.getElementById(
+      "teacherQuizAnalytics"
+    );
+
+  container.innerHTML = "";
+
+  (data.quizzes || [])
+  .forEach(quiz => {
+
+    container.innerHTML += `
+  <div class="history-card">
+
+    <h3>${quiz.title}</h3>
+
+    <p>Assigned: ${quiz.assigned}</p>
+
+    <p>Attempted: ${quiz.attempted}</p>
+
+    <p>Pending: ${quiz.pending}</p>
+
+    <p>Average: ${quiz.averageScore}%</p>
+
+    <button
+      onclick="viewResults('${quiz.quizId}')"
+    >
+      📊 View Results
+    </button>
+
+  </div>
+`;
+  });
+}
+async function loadTeacherQuizzes() {
+
+  const container =
+    document.getElementById(
+      "teacher-quizzes"
+    );
+
+  try {
+
+    // const res =
+    //   await fetch(
+    //     `${apiBase}/analytics/teacher`
+    //   );
+    const token =
+  localStorage.getItem(
+    "quiz_access_token"
+  );
+
+const res =
+  await fetch(
+    `${apiBase}/analytics/teacher`,
+    {
+      headers:{
+        Authorization:
+          `Bearer ${token}`
+      }
+    }
+  );
+
+    const data =
+      await res.json();
+
+    container.innerHTML = "";
+
+    (data.quizzes || [])
+    .forEach(quiz => {
+
+      container.innerHTML += `
+        <div class="history-card">
+
+          <h3>
+            ${quiz.title}
+          </h3>
+
+          <button
+  onclick="
+    editQuiz(
+      '${quiz.quizId}'
+    )
+  "
+>
+  ✏ Edit
+</button>
+
+          <button
+  onclick="
+    deleteQuiz(
+      '${quiz.quizId}'
+    )
+  "
+>
+  🗑 Delete
+</button>
+
+        </div>
+      `;
+    });
+
+  } catch {
+
+    container.innerHTML =
+      "<p>Failed to load quizzes.</p>";
+  }
+}
+
+function showSection(id){
+
+  [
+    "dashboardSection",
+    "createQuizSection",
+    "myQuizzesSection",
+    "studySection",
+    "analyticsSection"
+  ].forEach(section => {
+
+    document.getElementById(
+      section
+    ).style.display =
+      "none";
+  });
+
+  document.getElementById(
+    id
+  ).style.display =
+    "block";
+}
+document.getElementById(
+  "saveProfile"
+).onclick = async () => {
+
+  const name =
+    document.getElementById(
+      "profileName"
+    ).value.trim();
+
+  const password =
+    document.getElementById(
+      "profilePassword"
+    ).value.trim();
+
+  const email =
+    localStorage.getItem(
+      "quiz_user_email"
+    );
+
+  const res =
+    await fetch(
+      `${apiBase}/teacher/profile/update`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+
+          email,
+          name,
+          password
+        })
+      }
+    );
+
+  const data =
+    await res.json();
+
+  if (res.ok) {
+
+    if (name) {
+
+      localStorage.setItem(
+        "quiz_user_name",
+        name
+      );
+
+      document.getElementById(
+        "teacher-name"
+      ).innerText =
+        name;
+    }
+
+    alert(
+      "Profile Updated"
+    );
+
+    document.getElementById(
+      "profileModal"
+    ).style.display =
+      "none";
+
+  } else {
+
+    alert(
+      data.error ||
+      "Update Failed"
+    );
+  }
+};
+
+function renderQuestions(){
+
+  const container =
+  document.getElementById(
+    "question-list"
+  );
+
+  container.innerHTML = "";
+
+  quizQuestions.forEach(
+    (q,index)=>{
+
+      container.innerHTML += `
+        <div class="question-card">
+
+          <div class="question-header">
+
+            <div>
+
+              <h3>
+                Question ${index+1}
+              </h3>
+
+              ${
+                q.type === "image"
+                ? `<span class="image-badge">
+                     IMAGE
+                   </span>`
+                : ""
+              }
+
+            </div>
+
+           <button
+           class="delete-btn"
+           onclick="deleteQuestion(${index})"
+           title="Delete Question"
+           >
+            🗑️
+           </button>
+
+          </div>
+
+          <p>
+            ${
+              q.question ||
+              "Image Question"
+            }
+          </p>
+
+        </div>
+      `;
+    }
+  );
+}
+function deleteQuestion(index){
+
+  quizQuestions.splice(
+    index,
+    1
+  );
+
+  renderQuestions();
+}
+function closePublishModal(){
+
+  document.getElementById(
+    "publishModal"
+  ).style.display =
+    "none";
+}
+
+document.getElementById(
+  "create-quiz"
+).onclick =
+  confirmPublish;
+
+async function viewResults(
+  quizId
+){
+
+  const res =
+    await fetch(
+      `${apiBase}/quiz/${quizId}/results`
+    );
+
+  const data =
+    await res.json();
+
+  let html = `
+    <table
+      style="
+        width:100%;
+        border-collapse:collapse;
+      "
+    >
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Score</th>
+        <th>%</th>
+      </tr>
+  `;
+
+  data.results.forEach(r=>{
+
+    const percentage =
+      Math.round(
+        (r.score /
+         r.totalQuestions)
+         *100
+      );
+
+    html += `
+<tr>
+  <td>${r.studentName}</td>
+
+  <td>${r.studentEmail}</td>
+
+  <td>
+    <span class="score-badge">
+      ${r.score}/${r.totalQuestions}
+    </span>
+  </td>
+
+  <td>
+    <span class="percent-badge">
+      ${percentage}%
+    </span>
+  </td>
+</tr>
+`;
+  });
+
+  html += "</table>";
+
+  html += `
+    <br>
+
+    <button
+  class="download-btn"
+  onclick="downloadResults('${quizId}')"
+>
+  📥 Download CSV
+</button>
+  `;
+
+  document.getElementById(
+    "resultsTable"
+  ).innerHTML = html;
+
+  document.getElementById(
+    "resultsModal"
+  ).style.display =
+    "flex";
+}
+
+function downloadResults(
+  quizId
+){
+
+  const table =
+    document.querySelector(
+      "#resultsTable table"
+    );
+
+  if(!table) return;
+
+  let csv = [];
+
+  for(
+    let row of table.rows
+  ){
+
+    let cols =
+      [...row.cells]
+      .map(
+        cell =>
+          `"${cell.innerText}"`
+      );
+
+    csv.push(
+      cols.join(",")
+    );
+  }
+
+  const blob =
+    new Blob(
+      [csv.join("\n")],
+      {
+        type:
+          "text/csv"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+  const a =
+    document.createElement(
+      "a"
+    );
+
+  a.href = url;
+
+  a.download =
+    `quiz-results-${quizId}.csv`;
+
+  a.click();
+
+  URL.revokeObjectURL(
+    url
+  );
+}
+
+async function deleteQuiz(
+  quizId
+){
+
+  const ok =
+    confirm(
+      "Delete this quiz?"
+    );
+
+  if(!ok) return;
+
+  const res =
+    await fetch(
+      `${apiBase}/quiz/${quizId}`,
+      {
+        method:"DELETE"
+      }
+    );
+
+  if(res.ok){
+
+    alert(
+      "Quiz Deleted"
+    );
+
+    loadTeacherQuizzes();
+
+    loadTeacherAnalytics();
+
+  }else{
+
+    alert(
+      "Delete Failed"
+    );
+  }
+}
+async function editQuiz(
+  quizId
+){
+
+  editingQuizId =
+    quizId;
+
+  const res =
+    await fetch(
+      `${apiBase}/quiz/${quizId}`
+    );
+
+  const quiz =
+    await res.json();
+
+  document.getElementById(
+    "editQuizTitle"
+  ).value =
+    quiz.title || "";
+
+  document.getElementById(
+    "editDeadline"
+  ).value =
+    quiz.deadline || "";
+
+  document.getElementById(
+    "editStudents"
+  ).value =
+    (
+      quiz.assignedStudents || []
+    ).join(", ");
+
+  editingQuestions =
+    quiz.questions || [];
+
+  renderEditQuestions();
+
+  document.getElementById(
+    "editQuizModal"
+  ).style.display =
+    "flex";
+}
+
+function renderEditQuestions(){
+
+  const container =
+    document.getElementById(
+      "editQuestions"
+    );
+
+  container.innerHTML = "";
+
+  editingQuestions.forEach(
+    (q,index)=>{
+
+      container.innerHTML += `
+<div class="question-card">
+  ${
+  q.type === "image" && q.fileUrl
+  ? `
+  <a
+    href="${q.fileUrl}"
+    target="_blank"
+  >
+    <img
+      src="${q.fileUrl}"
+      style="
+        max-width:250px;
+        border-radius:12px;
+        cursor:pointer;
+        margin-bottom:15px;
+      "
+    >
+  </a>
+  `
+  : ""
+}
+
+  <label>Question</label>
+  <input
+    value="${q.question || ''}"
+    onchange="
+      editingQuestions[${index}].question =
+      this.value
+    "
+  >
+
+  <label>Option A</label>
+  <input
+    value="${q.options?.[0] || ''}"
+    onchange="
+      editingQuestions[${index}].options[0] =
+      this.value
+    "
+  >
+
+  <label>Option B</label>
+  <input
+    value="${q.options?.[1] || ''}"
+    onchange="
+      editingQuestions[${index}].options[1] =
+      this.value
+    "
+  >
+
+  <label>Option C</label>
+  <input
+    value="${q.options?.[2] || ''}"
+    onchange="
+      editingQuestions[${index}].options[2] =
+      this.value
+    "
+  >
+
+  <label>Option D</label>
+  <input
+    value="${q.options?.[3] || ''}"
+    onchange="
+      editingQuestions[${index}].options[3] =
+      this.value
+    "
+  >
+
+  <label>Correct Answer</label>
+  <input
+    value="${q.answer || ''}"
+    onchange="
+      editingQuestions[${index}].answer =
+      this.value
+    "
+  >
+
+  <button
+    onclick="
+      deleteEditQuestion(${index})
+    "
+  >
+    🗑 Delete Question
+  </button>
+
+</div>
+`;
+    }
+  );
+}
+
+function deleteEditQuestion(
+  index
+){
+
+  editingQuestions.splice(
+    index,
+    1
+  );
+
+  renderEditQuestions();
+}
+
+function addEditQuestion(){
+
+  editingQuestions.push({
+  type:"text",
+  question:"",
+  options:[
+    "",
+    "",
+    "",
+    ""
+  ],
+  answer:""
+});
+
+  renderEditQuestions();
+}
+
+async function saveQuizChanges(){
+
+  await fetch(
+    `${apiBase}/quiz/${editingQuizId}`,
+    {
+      method:"PUT",
+
+      headers:{
+        "Content-Type":
+          "application/json"
+      },
+
+      body:JSON.stringify({
+
+        title:
+          document.getElementById(
+            "editQuizTitle"
+          ).value,
+
+        deadline:
+          document.getElementById(
+            "editDeadline"
+          ).value,
+
+        assignedStudents:
+          document
+          .getElementById(
+            "editStudents"
+          )
+          .value
+          .split(",")
+          .map(
+            x=>x.trim()
+          )
+          .filter(x=>x),
+
+        questions:
+          editingQuestions
+      })
+    }
+  );
+
+  alert(
+    "Quiz Updated"
+  );
+
+  document.getElementById(
+    "editQuizModal"
+  ).style.display =
+    "none";
+
+  loadTeacherQuizzes();
+}
+
+</script>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>QuizForge</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="auth.css">
+</head>
+
+<body>
+
+<div class="bg-grid"></div>
+
+<div class="auth-container">
+
+<header class="top-nav">
+
+<div class="logo-wrap">
+
+<div class="logo-icon">
+📋
+</div>
+
+<div class="logo-text">
+QuizForge
+</div>
+
+</div>
+
+<button class="link-btn" id="showQuickQuiz">
+Quick Quiz Access
+</button>
+
+</header>
+
+<section class="hero">
+
+<div class="platform-badge">
+Smart Learning Platform
+</div>
+
+<h1>
+Where Knowledge
+<span>Gets Tested</span>
+</h1>
+
+<p>
+Create quizzes, assign students,
+share study materials and track
+performance with a modern cloud-powered
+learning platform.
+</p>
+
+</section>
+
+<div class="role-toggle">
+
+<button
+id="teacherTab"
+class="role-btn active">
+
+Teacher
+
+</button>
+
+<button
+id="studentTab"
+class="role-btn">
+
+Student
+
+</button>
+
+</div>
+
+<div class="login-card">
+
+<!-- TEACHER -->
+
+<div id="teacherPanel">
+
+<div class="card-top">
+
+<div class="icon-circle">
+🎓
+</div>
+
+<div>
+
+<h2>
+Teacher Access
+</h2>
+
+<p>
+Manage quizzes and students
+</p>
+
+</div>
+
+</div>
+
+<input
+id="teacher-email"
+type="email"
+placeholder="Teacher Email">
+
+<input
+id="teacher-pass"
+type="password"
+placeholder="Password">
+
+<div class="row-between">
+
+<label>
+
+<input type="checkbox">
+
+Remember me
+
+</label>
+
+<button
+type="button"
+id="teacher-forgot-btn"
+class="forgot-link">
+
+Forgot Password?
+
+</button>
+
+</div>
+
+<button
+id="teacher-login"
+class="primary-btn">
+
+Login as Teacher
+
+</button>
+
+<div
+id="teacher-msg"
+class="msg">
+</div>
+
+</div>
+
+<!-- STUDENT -->
+
+<div
+id="studentPanel"
+style="display:none">
+
+<div class="card-top">
+
+<div class="icon-circle">
+👨‍🎓
+</div>
+
+<div>
+
+<h2>
+Student Access
+</h2>
+
+<p>
+Attend quizzes and view results
+</p>
+
+</div>
+
+</div>
+
+<input
+id="student-email"
+type="email"
+placeholder="Student Email">
+
+<input
+id="student-pass"
+type="password"
+placeholder="Password">
+
+<div class="row-between">
+
+<label>
+
+<input type="checkbox">
+
+Remember me
+
+</label>
+
+<button
+type="button"
+id="student-forgot-btn"
+class="forgot-link">
+
+Forgot Password?
+
+</button>
+
+</div>
+
+<button
+id="student-login"
+class="primary-btn">
+
+Login as Student
+
+</button>
+
+<div
+id="student-msg"
+class="msg">
+</div>
+
+</div>
+
+<div class="divider"></div>
+
+<button
+class="create-account-btn"
+id="openSignup">
+
+Create New Account
+
+</button>
+
+</div>
+<!-- ===========================
+     QUICK QUIZ ACCESS PANEL
+=========================== -->
+
+<div
+id="quickQuizPanel"
+class="quick-panel"
+style="display:none;">
+
+<div class="quick-header">
+
+<button
+id="backToLogin"
+class="back-btn">
+
+← Back
+
+</button>
+
+<h2>
+Quick Quiz Access
+</h2>
+
+<p>
+Join a quiz instantly using a link or quiz ID.
+</p>
+
+</div>
+
+<input
+id="quiz-link"
+type="text"
+placeholder="Paste quiz URL or Quiz ID">
+
+<button
+id="open-quiz"
+class="primary-btn">
+
+Open Quiz
+
+</button>
+
+<div
+id="link-msg"
+class="msg">
+</div>
+
+</div>
+
+<!-- ===========================
+     FOOTER STATS
+=========================== -->
+
+<section class="stats-section">
+
+<div class="stat-card">
+
+<h3>2400+</h3>
+
+<span>
+Teachers
+</span>
+
+</div>
+
+<div class="stat-card">
+
+<h3>18000+</h3>
+
+<span>
+Students
+</span>
+
+</div>
+
+<div class="stat-card">
+
+<h3>95000+</h3>
+
+<span>
+Quizzes
+</span>
+
+</div>
+
+</section>
+
+</div>
+
+<!-- ===========================
+     SIGNUP MODAL
+=========================== -->
+
+<div
+id="signupModal"
+class="modal">
+
+<div class="modal-content signup-modal">
+
+<span
+id="closeSignup"
+class="close-btn">
+
+✕
+
+</span>
+
+<h2>
+Create Account
+</h2>
+
+<p>
+Join QuizForge and start learning smarter.
+</p>
+
+<input
+id="signup-name"
+type="text"
+placeholder="Full Name">
+
+<input
+id="signup-email"
+type="email"
+placeholder="Email Address">
+
+<input
+id="signup-phone"
+type="tel"
+placeholder="Mobile Number">
+
+<input
+id="signup-pass"
+type="password"
+placeholder="Password">
+
+<select id="signup-role">
+
+<option value="student">
+Student
+</option>
+
+<option value="teacher">
+Teacher
+</option>
+
+</select>
+
+<button
+id="signup-btn"
+class="primary-btn">
+
+Create Account
+
+</button>
+
+<div
+id="signup-msg"
+class="msg">
+</div>
+
+</div>
+
+</div>
+
+<!-- ===========================
+     FORGOT PASSWORD MODAL
+=========================== -->
+
+<div
+id="forgotModal"
+class="modal">
+
+<div class="modal-content">
+
+<span
+id="closeForgot"
+class="close-btn">
+
+✕
+
+</span>
+
+<h2>
+Reset Password
+</h2>
+
+<input
+type="email"
+id="forgotEmail"
+placeholder="Registered Email">
+
+<button
+id="sendResetBtn"
+class="primary-btn">
+
+Send OTP
+
+</button>
+
+<input
+type="text"
+id="forgotOtp"
+placeholder="Enter OTP">
+
+<input
+type="password"
+id="forgotPassword"
+placeholder="New Password">
+
+<button
+id="resetPasswordBtn"
+class="primary-btn">
+
+Reset Password
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ===========================
+     OTP MODAL
+=========================== -->
+
+<div
+id="otpModal"
+class="otp-modal hidden">
+
+<div class="otp-box">
+<span
+id="closeOtp"
+class="close-btn">
+
+✕
+
+</span>
+<div class="otp-icon">
+
+📧
+
+</div>
+
+<h2>
+Verify Email
+</h2>
+
+<p>
+Enter the OTP sent to your email.
+</p>
+
+<input
+type="text"
+id="otpCode"
+placeholder="Enter OTP">
+
+<button
+id="verifyOtpBtn"
+class="primary-btn">
+
+Verify Account
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+/* Teacher Student Toggle */
+
+const teacherTab =
+document.getElementById("teacherTab");
+
+const studentTab =
+document.getElementById("studentTab");
+
+const teacherPanel =
+document.getElementById("teacherPanel");
+
+const studentPanel =
+document.getElementById("studentPanel");
+
+teacherTab.onclick = () => {
+
+teacherTab.classList.add("active");
+studentTab.classList.remove("active");
+
+teacherPanel.style.display = "block";
+studentPanel.style.display = "none";
+
+};
+
+studentTab.onclick = () => {
+
+studentTab.classList.add("active");
+teacherTab.classList.remove("active");
+
+teacherPanel.style.display = "none";
+studentPanel.style.display = "block";
+
+};
+
+/* Signup Modal */
+
+document
+.getElementById("openSignup")
+.onclick = () => {
+
+document
+.getElementById("signupModal")
+.style.display = "flex";
+
+};
+
+document
+.getElementById("closeSignup")
+.onclick = () => {
+
+document
+.getElementById("signupModal")
+.style.display = "none";
+
+};
+
+/* Quick Quiz */
+
+document
+.getElementById("showQuickQuiz")
+.onclick = () => {
+
+document
+.querySelector(".login-card")
+.style.display = "none";
+
+document
+.getElementById("quickQuizPanel")
+.style.display = "block";
+
+};
+
+document
+.getElementById("backToLogin")
+.onclick = () => {
+
+document
+.querySelector(".login-card")
+.style.display = "block";
+
+document
+.getElementById("quickQuizPanel")
+.style.display = "none";
+
+};
+
+</script>
+
+<script src="auth.js"></script>
+
+</body>
+</html>

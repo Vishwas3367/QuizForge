@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Take Quiz — Quiz App</title>
+  <link rel="stylesheet" href="quiz.css">
+</head>
+
+<body>
+
+  <div id="customAlert" class="custom-alert">
+
+  <div class="custom-alert-box">
+
+    <div id="customAlertMessage"></div>
+
+    <button onclick="closeAlert()">
+      OK
+    </button>
+
+  </div>
+
+</div>
+
+<div class="container">
+
+  <!-- Quiz Header -->
+
+<div class="quiz-header-card">
+
+  <h1 id="quiz-title"></h1>
+
+  <div id="teacherInfo"></div>
+
+  <div id="studentInfo"></div>
+
+  <div id="deadlineInfo"></div>
+
+</div>
+   
+  <div id="participantForm" class="question-card">
+
+  <h2>Quiz Registration</h2>
+
+  <input
+    id="participantName"
+    type="text"
+    placeholder="Enter Your Name"
+    style="width:100%;margin-bottom:10px;"
+  >
+
+  <input
+    id="participantEmail"
+    type="email"
+    placeholder="Enter Your Email"
+    style="width:100%;margin-bottom:10px;"
+  >
+
+  <button
+    onclick="startQuizAttempt()"
+  >
+    Start Quiz
+  </button>
+
+</div>
+  <!-- Progress -->
+
+  <div
+  class="progress-section"
+  id="quizContent"
+  style="display:none;"
+>
+
+    <div id="qnum"></div>
+
+    <div class="progress-bar">
+
+      <div id="progressFill"></div>
+
+    </div>
+
+  </div>
+
+  <!-- Main Question Card -->
+
+  <div
+  class="question-card"
+  id="questionCard"
+  style="display:none;"
+>
+
+    <div id="question"></div>
+
+    <div id="quizAttachment"></div>
+
+    <div id="options"></div>
+
+    <div class="navigation-buttons">
+
+<button
+  id="prev"
+  style="display:none;"
+>
+  Previous
+</button>
+
+<button
+  id="next"
+  style="display:none;"
+>
+  Next
+</button>
+
+  </div>
+</div>
+
+  <!-- Result -->
+
+  <div
+  id="result"
+  class="result-card"
+  style="display:none"
+>
+
+  <h2>🎉 Quiz Completed</h2>
+
+  <h3 id="resultTitle"></h3>
+
+  <p id="score"></p>
+
+  <button onclick="goHome()">
+    Back To Dashboard
+  </button>
+
+</div>
+
+</div>
+
+  <script>
+const apiBase =
+  "https://ti3d0a29rd.execute-api.ap-south-1.amazonaws.com/dev";
+
+let questions = [],
+    index = 0,
+    score = 0,
+    selectedAnswers = [];
+
+let submitted = false;
+
+let quizTitle = "";
+let participantName = "";
+let participantEmail = "";
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const quizId =
+  params.get("id");
+
+async function loadQuiz() {
+
+  try {
+
+    const res =
+      await fetch(
+        `${apiBase}/quiz/${quizId}`
+      );
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+      throw new Error(
+        data.error ||
+        "Failed to load quiz"
+      );
+    }
+
+    quizTitle = data.title;
+
+document.getElementById(
+  "quiz-title"
+).textContent =
+  quizTitle;
+    document.getElementById(
+  "studentInfo"
+).style.display =
+  "none";
+
+document.getElementById(
+  "teacherInfo"
+).textContent =
+  `Created By: ${
+    data.teacherName ||
+    "Teacher"
+  }`;
+    if(data.deadline){
+      startTimer(
+        data.deadline
+      );
+    }
+
+    questions =
+      data.questions || [];
+
+    if (
+      questions.length === 0
+    ) {
+      throw new Error(
+        "No questions found"
+      );
+    }
+
+    // render();
+
+  } catch (err) {
+
+    console.error(err);
+
+    document.getElementById(
+      "question"
+    ).innerHTML =
+      `<p style="color:red">${err.message}</p>`;
+  }
+}
+
+function startTimer(
+  deadline
+){
+
+  const timer =
+  document.getElementById(
+    "deadlineInfo"
+  );
+
+  const timerId = setInterval(()=>{
+
+  const diff =
+    new Date(deadline)
+    - new Date();
+
+  if(diff <= 0){
+
+  clearInterval(timerId);
+
+  alert("Quiz deadline expired");
+
+  window.location.href =
+    "student.html";
+
+  return;
+}
+
+    const mins =
+      Math.floor(
+        diff / 60000
+      );
+
+    const secs =
+      Math.floor(
+        (diff % 60000)
+        / 1000
+      );
+
+    timer.textContent =
+      `Time Left: ${mins}:${secs}`;
+
+  },1000);
+}
+
+function startQuizAttempt(){
+
+  participantName =
+    document.getElementById(
+      "participantName"
+    ).value.trim();
+
+  participantEmail =
+    document.getElementById(
+      "participantEmail"
+    ).value.trim();
+
+  if(
+    !participantName ||
+    !participantEmail
+  ){
+    alert(
+      "Enter name and email"
+    );
+    return;
+  }
+
+  document.getElementById(
+    "participantForm"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "questionCard"
+  ).style.display =
+    "block";
+
+  document.getElementById(
+    "prev"
+  ).style.display =
+    "inline-block";
+
+  document.getElementById(
+    "next"
+  ).style.display =
+    "inline-block";
+  document.getElementById(
+  "studentInfo"
+).style.display =
+  "block";
+
+document.getElementById(
+  "studentInfo"
+).innerHTML =
+  `
+  Student:
+  ${participantName}
+  <br>
+  Email:
+  ${participantEmail}
+  `;
+
+  render();
+}
+
+function render() {
+
+  if (
+  index >= questions.length
+) {
+  return;
+}
+
+  const q =
+    questions[index];
+
+  document.getElementById(
+    "qnum"
+  ).textContent =
+    `Question ${index + 1} of ${questions.length}`;
+  document.getElementById(
+  "progressFill"
+).style.width =
+  ((index + 1) / questions.length * 100)
+  + "%";
+
+  document.getElementById(
+  "question"
+).textContent =
+  q.question;
+
+const attachment =
+  document.getElementById(
+    "quizAttachment"
+  );
+
+if(q.fileUrl){
+
+  attachment.innerHTML = `
+    <img
+      src="${q.fileUrl}"
+      class="question-image"
+    >
+  `;
+
+}else{
+
+  attachment.innerHTML = "";
+
+}
+
+  const opts =
+    document.getElementById(
+      "options"
+    );
+
+  opts.innerHTML = "";
+
+  q.options.forEach(opt => {
+
+    const btn =
+      document.createElement(
+        "button"
+      );
+
+    btn.className =
+      "option";
+
+    btn.textContent =
+      opt;
+
+    btn.onclick = () =>
+      selectOption(
+        opt,
+        q.answer,
+        btn
+      );
+
+    opts.appendChild(btn);
+  });
+}
+
+function selectOption(
+  opt
+){
+
+  selectedAnswers[index] =
+    opt;
+
+  Array.from(
+    document.querySelectorAll(
+      ".option"
+    )
+  ).forEach(btn=>{
+
+    btn.style.background =
+      "";
+
+  });
+
+  event.target.style.background = "#ede9fe";
+  event.target.style.color = "#1e293b";
+  event.target.style.borderColor = "#5b4cf5";
+}
+
+document.getElementById(
+  "next"
+).onclick = () => {
+
+  if (!selectedAnswers[index]) {
+    alert("Please select an option");
+    return;
+  }
+
+  if (index === questions.length - 1) {
+    showResult();
+    return;
+  }
+
+  index++;
+  render();
+};
+document.getElementById(
+  "prev"
+).onclick = () => {
+
+  if(index > 0){
+
+    index--;
+
+    render();
+  }
+};
+async function showResult() {
+
+  if (submitted) return;
+  submitted = true;
+  score = 0;
+
+questions.forEach((q, i) => {
+
+  if (
+    selectedAnswers[i] ===
+    q.answer
+  ) {
+    score++;
+  }
+
+});
+
+  try {
+    const token =
+  localStorage.getItem(
+    "quiz_access_token"
+  );
+
+const headers = {
+  "Content-Type":"application/json"
+};
+
+if (
+  token &&
+  token !== "null"
+) {
+  headers.Authorization =
+    `Bearer ${token}`;
+}
+
+const submitRes =
+  await fetch(
+    `${apiBase}/quiz/${quizId}/submit`,
+    {
+      method: "POST",
+      headers,
+
+body: JSON.stringify({
+
+  quizId,
+
+  quizTitle,
+
+  studentName:
+    participantName,
+
+  studentEmail:
+    participantEmail,
+
+  answers:
+    selectedAnswers || [],
+
+  score,
+
+  totalQuestions:
+    questions.length
+})
+        }
+      );
+
+    const submitData =
+      await submitRes.json();
+
+    if (!submitRes.ok) {
+
+  showAlert(
+    "⚠️ " +
+    (
+      submitData.error ||
+      "Quiz already submitted"
+    )
+  );
+
+  setTimeout(() => {
+
+    window.location.href =
+      "student.html";
+
+  }, 2000);
+
+  return;
+}
+
+  } catch (err) {
+
+    console.error(
+      "Submit failed",
+      err
+    );
+
+    showAlert(
+  "❌ Failed to submit quiz"
+);
+
+    return;
+  }
+
+  document.getElementById(
+    "qnum"
+  ).style.display =
+    "none";
+  document.querySelector(
+  ".quiz-header-card"
+).style.display =
+  "none";
+
+  document.getElementById(
+    "question"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "options"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "next"
+  ).style.display =
+    "none";
+    document.getElementById(
+  "quizAttachment"
+).style.display =
+  "none";
+
+document.getElementById(
+  "prev"
+).style.display =
+  "none";
+
+document.getElementById(
+  "studentInfo"
+).style.display =
+  "none";
+
+document.getElementById(
+  "deadlineInfo"
+).style.display =
+  "none";
+
+  document.getElementById(
+    "result"
+  ).style.display =
+    "block";
+
+    document.getElementById(
+  "resultTitle"
+).textContent =
+  quizTitle;
+  document.getElementById(
+    "score"
+  ).textContent =
+    `Your Score: ${score} / ${questions.length}`;
+}
+
+function goHome() {
+  window.location.href =
+    "student.html";
+}
+
+function showAlert(message){
+
+  document.getElementById(
+    "customAlertMessage"
+  ).innerHTML =
+    message;
+
+  document.getElementById(
+    "customAlert"
+  ).style.display =
+    "flex";
+}
+
+function closeAlert(){
+
+  document.getElementById(
+    "customAlert"
+  ).style.display =
+    "none";
+}
+
+loadQuiz();
+</script>
