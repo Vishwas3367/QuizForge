@@ -5,97 +5,103 @@
 </p>
 
 <p align="center">
-
-![AWS](https://img.shields.io/badge/AWS-Cloud-orange)
-![Serverless](https://img.shields.io/badge/Serverless-Framework-red)
-![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow)
-![Node.js](https://img.shields.io/badge/Node.js-Backend-green)
-![DynamoDB](https://img.shields.io/badge/DynamoDB-NoSQL-blue)
-![Cognito](https://img.shields.io/badge/Cognito-Authentication-purple)
-
+  <img src="https://img.shields.io/badge/AWS-Cloud-orange" />
+  <img src="https://img.shields.io/badge/Serverless-Framework-red" />
+  <img src="https://img.shields.io/badge/JavaScript-ES6-yellow" />
+  <img src="https://img.shields.io/badge/Node.js-Backend-green" />
+  <img src="https://img.shields.io/badge/DynamoDB-NoSQL-blue" />
+  <img src="https://img.shields.io/badge/Cognito-Authentication-purple" />
 </p>
 
 ---
 
-## 🌟 Overview
+## 📖 Overview
 
 QuizForge is a fully serverless cloud-based quiz management platform that enables teachers to create quizzes, distribute study materials, monitor student performance, and analyze results while allowing students to attempt quizzes and track their learning progress.
 
-Built using AWS services including Cognito, Lambda, DynamoDB, API Gateway, CloudFront, and S3.
+The platform is built using modern AWS services and follows a scalable serverless architecture.
 
 ---
 
-## ✨ Key Features
+## ✨ Features
 
-### 🔐 Authentication & Security
+### 👨‍🏫 Teacher Module
 
-* Email OTP Verification
+* Secure registration and login
+* Create quizzes
+* Edit quizzes
+* Delete quizzes
+* View student performance
+* Upload study materials
+* Analytics dashboard
+
+### 👨‍🎓 Student Module
+
+* Secure registration and login
+* Email OTP verification
+* Attempt quizzes
+* View quiz history
+* Track performance
+* Access study materials
+* View leaderboard
+
+### 🔒 Authentication & Security
+
 * AWS Cognito Authentication
 * Role-Based Access Control
-* Secure Password Reset
-* Session Management
-
-### 👨‍🏫 Teacher Portal
-
-* Create Quizzes
-* Update Quizzes
-* Delete Quizzes
-* Upload Study Materials
-* Monitor Student Performance
-* View Analytics Dashboard
-
-### 👨‍🎓 Student Portal
-
-* Attempt Quizzes
-* Access Study Materials
-* View Results
-* Track Quiz History
-* Leaderboard Ranking
-
-### 📊 Analytics
-
-* Quiz Statistics
-* Student Performance Tracking
-* Result Analysis
-* Leaderboard Generation
-
----
-
-## 🏗️ System Architecture
-
-```text
-Frontend (HTML/CSS/JS)
-          │
-          ▼
-    CloudFront CDN
-          │
-          ▼
-     API Gateway
-          │
-          ▼
-     AWS Lambda
-      │       │
-      ▼       ▼
- DynamoDB   Cognito
-```
+* Email Verification (OTP)
+* JWT Token Authentication
+* Protected APIs
 
 ---
 
 ## ☁️ AWS Services Used
 
-| Service        | Purpose                           |
-| -------------- | --------------------------------- |
-| Amazon Cognito | Authentication & OTP Verification |
-| AWS Lambda     | Serverless Backend                |
-| API Gateway    | REST APIs                         |
-| DynamoDB       | Database Storage                  |
-| CloudFront     | Global Content Delivery           |
-| S3             | Static Website Hosting            |
-| IAM            | Security & Permissions            |
+| Service            | Purpose                          |
+| ------------------ | -------------------------------- |
+| AWS Lambda         | Backend business logic           |
+| Amazon API Gateway | REST API management              |
+| Amazon Cognito     | Authentication & User Management |
+| Amazon DynamoDB    | NoSQL Database                   |
+| Amazon S3          | Frontend Hosting & File Storage  |
+| Amazon CloudFront  | Global Content Delivery          |
+| Amazon SES         | OTP & Email Verification         |
+| AWS IAM            | Permissions & Security           |
+| Amazon CloudWatch  | Monitoring & Logs                |
 
 ---
 
-## 🛠 Tech Stack
+## 🏗️ Architecture
+
+```text
+User
+  ↓
+CloudFront
+  ↓
+S3 Hosted Frontend
+  ↓
+API Gateway
+  ↓
+AWS Lambda
+  ↓
+DynamoDB
+
+Authentication
+     ↓
+ Amazon Cognito
+
+Email Verification
+     ↓
+ Amazon SES
+
+Monitoring
+     ↓
+ CloudWatch
+```
+
+---
+
+## 🛠️ Tech Stack
 
 ### Frontend
 
@@ -116,6 +122,16 @@ Frontend (HTML/CSS/JS)
 ### Authentication
 
 * Amazon Cognito
+* JWT Tokens
+
+### Cloud Services
+
+* Amazon S3
+* CloudFront
+* API Gateway
+* SES
+* IAM
+* CloudWatch
 
 ---
 
@@ -124,50 +140,26 @@ Frontend (HTML/CSS/JS)
 ```text
 QuizForge
 │
-├── quiz-app-front-end
+├── quiz-app-front-end/
 │   ├── auth.html
+│   ├── auth.js
 │   ├── teacher.html
 │   ├── student.html
-│   ├── quiz.html
-│   └── assets
+│   └── styles
 │
-├── quiz-app-backend-aws
-│   ├── functions
-│   │   ├── auth
-│   │   ├── quiz
-│   │   ├── analytics
-│   │   ├── leaderboard
-│   │   ├── student
-│   │   ├── study
-│   │   └── upload
+├── quiz-app-backend-aws/
+│   ├── functions/
+│   │   ├── auth/
+│   │   ├── quiz/
+│   │   ├── student/
+│   │   ├── analytics/
+│   │   └── upload/
 │   │
-│   ├── services
-│   ├── utils
+│   ├── services/
+│   ├── utils/
 │   └── serverless.yml
-```
-
----
-
-## 🔌 API Endpoints
-
-### Authentication
-
-```http
-POST /auth/register
-POST /auth/login
-POST /auth/confirm
-POST /auth/forgot
-POST /auth/reset
-```
-
-### Quiz Management
-
-```http
-POST   /quiz/create
-GET    /quiz/{id}
-PUT    /quiz/{id}
-DELETE /quiz/{id}
-POST   /quiz/{id}/submit
+│
+└── README.md
 ```
 
 ---
@@ -176,68 +168,29 @@ POST   /quiz/{id}/submit
 
 ### Frontend
 
-* Amazon S3
-* Amazon CloudFront
+* Hosted on Amazon S3
+* Distributed using CloudFront
 
 ### Backend
 
-* AWS Lambda
-* API Gateway
-
-Deploy Backend:
-
-```bash
-sls deploy
-```
+* Deployed using Serverless Framework
+* AWS Lambda Functions
+* API Gateway Endpoints
 
 ---
 
-## 📸 Screenshots
+## 🎯 Learning Outcomes
 
-### Login Page
+Through this project, I gained hands-on experience with:
 
-(Add Screenshot Here)
-
-### Teacher Dashboard
-
-(Add Screenshot Here)
-
-### Student Dashboard
-
-(Add Screenshot Here)
-
-### Analytics Dashboard
-
-(Add Screenshot Here)
-
----
-
-## 📚 Learning Outcomes
-
-✅ AWS Cloud Computing
-
-✅ Serverless Architecture
-
-✅ Authentication with Cognito
-
-✅ REST API Development
-
-✅ DynamoDB Design
-
-✅ Full Stack Development
-
-✅ Cloud Deployment
-
----
-
-## 🔮 Future Enhancements
-
-* AI-Based Quiz Generation
-* Mobile Application
-* Real-Time Notifications
-* Advanced Analytics
-* Quiz Sharing Links
-* Multi-Teacher Collaboration
+* Serverless Architecture
+* AWS Cloud Services
+* Authentication & Authorization
+* REST API Development
+* NoSQL Database Design
+* Cloud Deployment
+* Monitoring & Logging
+* Full Stack Application Development
 
 ---
 
@@ -248,4 +201,8 @@ sls deploy
 B.Tech CSE (IoT)
 Vellore Institute of Technology (VIT), Vellore
 
-⭐ If you like this project, don't forget to star the repository!
+GitHub: https://github.com/Vishwas3367
+
+---
+
+⭐ If you found this project interesting, please give it a star.
